@@ -2,8 +2,10 @@ import geopandas
 from geopandas import GeoDataFrame
 import json
 from shapely.geometry import Point
+import pickle
 
-countyMap:GeoDataFrame = geopandas.read_file('usa_counties.geojson')
+with open('countyMapBytes.pkl', 'rb') as file:
+    countyMap:GeoDataFrame = pickle.load(file)
 
 def GetCountyAndState(latitude:float, longitude:float, map:GeoDataFrame) -> tuple[str,str]:
     # Create a point using coords
@@ -27,7 +29,6 @@ def GetCountyAndState(latitude:float, longitude:float, map:GeoDataFrame) -> tupl
     state = state_codes.get(code)
     county = result['NAME'].iloc[0]
     return f'{county}, {state}'
-
 
 
 print(GetCountyAndState(41.0997803, -80.6495194, countyMap))
